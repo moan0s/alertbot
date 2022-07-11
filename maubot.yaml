@@ -1,0 +1,8 @@
+maubot: 0.1.0
+id: de.hyteck.alertbot
+version: 1.0.0
+license: AGPL-3.0-or-later
+modules:
+  - alertbot
+main_class: AlertBot
+webapp: true
