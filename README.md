@@ -1,4 +1,57 @@
-# Setup
+# Getting Started
+
+**Prerequisites:**
+* A maubot instance: Please [refer to the docs](https://docs.mau.fi/maubot/usage/setup/index.html) for setting up one
+* An instance of alertmanager
+
+**Getting the code**
+
+Clone this repository to your local computer and install maubot to have access to the maubot CLI
+```shell
+git clone https://github.com/moan0s/alertbot
+pip install maubot
+```
+
+**Login to your maubot instance**
+
+```shell
+mbc login
+```
+
+**Build&Upload the plugin**
+
+```shell
+mbc build -u
+```
+
+You now have the plugin installed. Now you have to set up an instance of the bot in the maubot manager and invite it to
+the room where the alerts should be sent. Also find out the room id by asking the bot for it with `!roomid`.
+
+
+
+**Configure alertmanager**
+
+This configuration will send all your alerts to the room `!zOcbWjsWzdREnihgeC:example.com` (if the bot has access to it).
+Put in your own room-id (see above).
+```yaml
+
+receivers:
+- name: alertbot
+  webhook_configs:
+  - url: https://synapse.hyteck.de/_matrix/maubot/plugin/alertbot/webhook/!zOcbWjsWzdREnihgeC:example.com
+route:
+  group_by:
+  - alertname
+  - cluster
+  - service
+  group_interval: 5m
+  group_wait: 30s
+  receiver: alertbot
+  repeat_interval: 3h
+
+```
+
+# Local testing Setup
 
 Use a domain e.g. webbhook.hyteck.de and configure nginx as 
 reverse proxy for port 4242 for this domain.
@@ -8,10 +61,7 @@ reverse proxy for port 4242 for this domain.
 Run the local server and connect via (29316 is the local maubot port)
 `ssh -N -R 4242:localhost:29316 s`
 
-
-
 # Send some data with
-
 
 Put the following in `data.json`
 ```json
