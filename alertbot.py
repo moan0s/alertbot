@@ -35,15 +35,22 @@ def alert_to_markdown(alert: dict) -> str:
     return message
 
 
+
 class AlertBot(Plugin):
-    @web.post("/webhook")
-    async def webhook(self, req: Request) -> Response:
+
+    async def send_alert(self, req, room):
         text = await req.text()
         self.log.info(text)
         content = json.loads(f"{text}")
         for message in get_alert_messages(content):
-            await self.client.send_markdown("!zOcbWjsWzdREnihgeC:hyteck.de", message)
-        return json_response({"status": "Ok"})
+            self.log.debug(f"Sending alert to {room}")
+            await self.client.send_markdown(room, message)
+
+    @web.post("/webhook/{room_id}")
+    async def webhook_room(self, req: Request) -> Response:
+        room_id = req.match_info["room_id"].strip()
+        await self.send_alert(req, room=room_id)
+        return json_response({"status": "ok"})
 
     @command.new()
     async def ping(self, evt: MessageEvent) -> None:
