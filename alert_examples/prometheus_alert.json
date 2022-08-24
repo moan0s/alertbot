@@ -1,0 +1,22 @@
+{"receiver":"matrix",
+"status":"firing",
+"alerts":[
+  {"status":"firing",
+  "labels":
+    {"alertname":"InstanceDown",
+    "environment":"monitoring.example.com",
+    "instance":"webserver.example.com",
+    "job":"node_exporter","severity":"critical"
+    },
+  "annotations":{"description":"webserver.example.com of job node_exporter has been down for more than 5 minutes.",
+  "summary":"Instance webserver.example.com down"},
+  "startsAt":"2022-06-23T11:53:14.318Z",
+  "endsAt":"0001-01-01T00:00:00Z",
+  "generatorURL":"http://monitoring.example.com:9090/graph?g0.expr=up+%3D%3D+0\u0026g0.tab=1",
+  "fingerprint":"9cd7837114d58797"}],
+  "groupLabels":{"alertname":"InstanceDown"},
+  "commonLabels":{"alertname":"InstanceDown",
+  "environment":"monitoring.example.com","instance":"webserver.example.com",
+  "job":"node_exporter","severity":"critical"},
+  "commonAnnotations":{"description":"webserver.example.com of job node_exporter has been down for more than 5 minutes.","summary":"Instance webserver.example.com down"},"externalURL":"https://alert.example","version":"4","groupKey":"{}:{alertname=\"InstanceDown\"}","truncatedAlerts":0}
+
