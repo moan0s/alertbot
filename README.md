@@ -1,3 +1,11 @@
+![Alertbot banner](assets/alertbanner.png)
+
+# Alertbot
+
+This bot uses the webhook functionality of monitoring/alerting solutions like Grafana or Alertmanager to forward alerts to matrix rooms.
+This means that you no longer have to use E-Mail or Slack to receive alerts. See the setup below for how to use it or
+join the [Alertbot room on matrix](https://matrix.to/#/#alertbot:hyteck.de)
+
 # Getting Started
 
 **Prerequisites:**
@@ -29,7 +37,7 @@ the room where the alerts should be sent. Also find out the room id by asking th
 
 
 
-**Configure alertmanager**
+# Setup Alertmanager
 
 This configuration will send all your alerts to the room `!zOcbWjsWzdREnihgeC:example.com` (if the bot has access to it).
 Put in your own room-id (see above).
@@ -51,17 +59,40 @@ route:
 
 ```
 
+
+# Setup Grafana
+
+The grafana setup is fairly simple and can be used to forward grafana alerts to matrix.
+
+![Screenshot of the Grafana Setup](assets/grafana.png)
+
+
+# Test your setup
+
+It can be a bit annoying to trigger an alert (e.g. by shutting down a server) to test if your configuration is right and if the bot works as intended.
+Therefore, you find a few example alerts in `alert_examples/` which allow you to test the bot.
+
+Use them with the following command (but adjust the webhook URL):
+
+```bash
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data "@alert_examples/data.json" \
+  https://webhook.example.com/_matrix/maubot/plugin/maubot/webhook/!zOcbWjsWzdREnihreC:example.com
+```
+
 # Local testing Setup
 
+Also you might want to test the bot on your local machine
 Use a domain e.g. webbhook.hyteck.de and configure nginx as 
 reverse proxy for port 4242 for this domain.
 
-# Connect
+## Connect
 
 Run the local server and connect via (29316 is the local maubot port)
 `ssh -N -R 4242:localhost:29316 s`
 
-# Send some data with
+## Send some data with
 
 Put the following in `data.json`
 ```json
@@ -75,9 +106,3 @@ curl --header "Content-Type: application/json" \
   https://webhook.hyteck.de/_matrix/maubot/plugin/maubot/webhook
 ```
 
-
-# Grafana setup
-
-The grafana setup is fairly simple and can be used to forward grafana alerts to matrix.
-
-![Screenshot of the Grafana Setup](grafana.png)
