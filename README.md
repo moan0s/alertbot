@@ -2,7 +2,7 @@
 
 **Prerequisites:**
 * A maubot instance: Please [refer to the docs](https://docs.mau.fi/maubot/usage/setup/index.html) for setting up one
-* An instance of alertmanager
+* An instance of alertmanager or grafana or a similar alerting program that is able to send webhooks
 
 **Getting the code**
 
@@ -74,3 +74,10 @@ curl --header "Content-Type: application/json" \
   --data "@data.json" \
   https://webhook.hyteck.de/_matrix/maubot/plugin/maubot/webhook
 ```
+
+
+# Grafana setup
+
+The grafana setup is fairly simple and can be used to forward grafana alerts to matrix.
+
+![Screenshot of the Grafana Setup](grafana.png)
