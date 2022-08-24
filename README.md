@@ -17,6 +17,7 @@ join the [Alertbot room on matrix](https://matrix.to/#/#alertbot:hyteck.de)
 Clone this repository to your local computer and install maubot to have access to the maubot CLI
 ```shell
 git clone https://github.com/moan0s/alertbot
+cd alertbot
 pip install maubot
 ```
 
