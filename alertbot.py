@@ -56,77 +56,94 @@ def get_alert_type(data):
     return "not-found"
 
 
-def get_alert_messages(alertmanager_data: dict, raw_mode=False) -> list:
+def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
     """
     Returns a list of messages in markdown format
 
+    :param alert_data: The data send to the bot as dict
     :param raw_mode: Toggles a mode where the data is not parsed but simply returned as code block in a message
-    :param alertmanager_data:
     :return: List of alert messages in markdown format
     """
-    if raw_mode:
-        return ["**Data received**\n```\n" + str(alertmanager_data).strip("\n").strip() + "\n```"]
-    messages = []
-    for alert in alertmanager_data["alerts"]:
-        messages.append(alert_to_markdown(alert))
+
+    alert_type = get_alert_type(alert_data)
+
+    if raw_mode or alert_type == "not-found":
+        return ["**Data received**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
+    else:
+        if alert_type == "grafana-alert":
+            messages = grafana_alert_to_markdown(alert_data)
+        elif alert_type == "grafana-resolved":
+            messages = grafana_alert_to_markdown(alert_data)
+        elif alert_type == "prometheus-alert":
+            messages = prometheus_alert_to_markdown(alert_data)
+        elif alert_type == "uptime-kuma-alert":
+            messages = uptime_kuma_alert_to_markdown(alert_data)
+        elif alert_type == "uptime-kuma-resolved":
+            messages = uptime_kuma_resolved_to_markdown(alert_data)
     return messages
 
 
-def alert_to_markdown(alert: dict) -> str:
-    if alert["fingerprint"]:
-        return grafana_alert_to_markdown(alert)
-    else:
-        return prometheus_alert_to_markdown(alert)
+def uptime_kuma_alert_to_markdown(alert_data: dict):
+    return ["**Uptime Kuma Alert Data:**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
 
 
-def grafana_alert_to_markdown(alert: dict) -> str:
+def uptime_kuma_resolved_to_markdown(alert_data: dict):
+    return ["**Uptime Kuma Resolved Data:**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
+
+
+def grafana_alert_to_markdown(alert_data: dict) -> list:
     """
     Converts a grafana alert json to markdown
 
-    :param alert:
-    :return: Alert as fomatted markdown
+    :param alert_data:
+    :return: Alerts as formatted markdown string list
     """
-    datetime_format = "%Y-%m-%dT%H:%M:%S%z"
-    if alert['status'] == "firing":
-        message = (
-f"""**Firing 🔥**: {alert['labels']['alertname']}  
-
+    messages = []
+    for alert in alert_data["alerts"]:
+        datetime_format = "%Y-%m-%dT%H:%M:%S%z"
+        if alert['status'] == "firing":
+            message = (
+                f"""**Firing 🔥**: {alert['labels']['alertname']}  
+    
 * **Instance:** {alert["valueString"]}
 * **Silence:** {alert["silenceURL"]}
 * **Started at:** {alert['startsAt']}
 * **Fingerprint:** {alert['fingerprint']}
-            """
-        )
-    if alert['status'] == "resolved":
-        end_at = datetime.datetime.strptime(alert['endsAt'], datetime_format)
-        start_at = datetime.datetime.strptime(alert['startsAt'], datetime_format)
-        message = (
-            f"""**Resolved 🥳**: {alert['labels']['alertname']}
-
+                """
+            )
+        if alert['status'] == "resolved":
+            end_at = datetime.datetime.strptime(alert['endsAt'], datetime_format)
+            start_at = datetime.datetime.strptime(alert['startsAt'], datetime_format)
+            message = (
+                f"""**Resolved 🥳**: {alert['labels']['alertname']}
+    
 * **Duration until resolved:** {end_at - start_at}
 * **Fingerprint:** {alert['fingerprint']}
-            """
-        )
-    return message
+                """
+            )
+        messages.append(message)
+    return messages
 
 
-def prometheus_alert_to_markdown(alert: dict) -> str:
+def prometheus_alert_to_markdown(alert_data: dict) -> str:
     """
     Converts a prometheus alert json to markdown
 
-    :param alert:
+    :param alert_data:
     :return: Alert as fomatted markdown
     """
-
-    message = (
-        f"""**{alert['status']}**: {alert['annotations']['description']}  
-
+    messages = []
+    for alert in alert_data["alerts"]:
+        message = (
+            f"""**{alert['status']}**: {alert['annotations']['description']}  
+    
 * **Alertname:** {alert["labels"]['alertname']}
 * **Instance:** {alert["labels"]['instance']}
 * **Job:** {alert["labels"]['job']}
-        """
-    )
-    return message
+            """
+        )
+        messages.append(message)
+    return messages
 
 
 class AlertBot(Plugin):
