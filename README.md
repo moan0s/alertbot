@@ -41,7 +41,7 @@ the room where the alerts should be sent. Also find out the room id by asking th
 # Setup Alertmanager
 
 This configuration will send all your alerts to the room `!zOcbWjsWzdREnihgeC:example.com` (if the bot has access to it).
-Put in your own room-id (see above).
+Put in your own room-id (`!roomid`) behind the webhook base url (`!url`):
 ```yaml
 
 receivers:
