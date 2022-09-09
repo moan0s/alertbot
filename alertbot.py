@@ -67,13 +67,6 @@ def get_alert_messages(alertmanager_data: dict, raw_mode=False) -> list:
     if raw_mode:
         return ["**Data received**\n```\n" + str(alertmanager_data).strip("\n").strip() + "\n```"]
     messages = []
-    """  try:
-        # Check if grafana alert/resolved
-        if alertmanager_data['alerts']:
-            messages.append(grafana_alert_to_markdown(alertmanager_data))
-
-    except KeyError:
-    """
     for alert in alertmanager_data["alerts"]:
         messages.append(alert_to_markdown(alert))
     return messages
