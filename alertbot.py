@@ -17,6 +17,45 @@ More information is on [Github](https://github.com/moan0s/alertbot)
 """
 
 
+def get_alert_type(data):
+    """
+    Currently supported are ["grafana-alert", "grafana-resolved", "prometheus-alert", "not-found"]
+
+    :return: alert type
+    """
+
+    # Uptime-kuma has heartbeat
+    try:
+        if data["heartbeat"]["status"] == 0:
+            return "uptime-kuma-alert"
+        elif data["heartbeat"]["status"] == 1:
+            return "uptime-kuma-resolved"
+    except KeyError:
+        pass
+
+    # Grafana
+    try:
+        data["alerts"][0]["labels"]["grafana_folder"]
+        if data['status'] == "firing":
+            return "grafana-alert"
+        else:
+            return "grafana-resolved"
+    except KeyError:
+        pass
+
+    # Prometheus
+    try:
+        if data["alerts"][0]["labels"]["job"]:
+            if data['status'] == "firing":
+                return "prometheus-alert"
+            else:
+                return "grafana-resolved"
+    except KeyError:
+        pass
+
+    return "not-found"
+
+
 def get_alert_messages(alertmanager_data: dict, raw_mode=False) -> list:
     """
     Returns a list of messages in markdown format
