@@ -1,27 +1,37 @@
-{"receiver": "Alertbot",
-"status": "resolved",
-"alerts": [{"status": "resolved",
-"labels": {"alertname": "HTTP response not OK",
-"grafana_folder": "General Alerting"},
-"annotations": {},
-"startsAt": "2022-08-24T18:45:00+02:00",
-"endsAt": "2022-08-24T19:29:00+02:00",
-"generatorURL": "http://0.0.0.0:3000/alerting/grafana/t7R1ZdZ4k/view",
-"fingerprint": "54827aa3e6b3dbbe",
-"silenceURL": "http://0.0.0.0:3000/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DHTTP+response+not+OK&matcher=grafana_folder%3DGeneral+Alerting",
-"dashboardURL": "",
-"panelURL": "",
-"valueString": ""}],
-"groupLabels": {},
-"commonLabels": {"alertname": "HTTP response not OK",
-"grafana_folder": "General Alerting"},
-"commonAnnotations": {},
-"externalURL": "http://0.0.0.0:3000/",
-"version": "1",
-"groupKey": "{}:{}",
-"truncatedAlerts": 0,
-"orgId": 1,
-"title": "[RESOLVED]  (HTTP response not OK General Alerting)",
-"state": "ok",
-"message": "**Resolved**\n\nValue: [no value]\nLabels:\n - alertname = HTTP response not OK\n - grafana_folder = General Alerting\nAnnotations:\nSource: http://0.0.0.0:3000/alerting/grafana/t7R1ZdZ4k/view\nSilence: http://0.0.0.0:3000/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DHTTP+response+not+OK&matcher=grafana_folder%3DGeneral+Alerting\n"}
+{
+  "receiver": "Alertbot",
+  "status": "resolved",
+  "alerts": [
+    {
+      "status": "resolved",
+      "labels": {
+        "alertname": "HTTP response not OK",
+        "grafana_folder": "General Alerting"
+      },
+      "annotations": {},
+      "startsAt": "2022-08-24T18:45:00+02:00",
+      "endsAt": "2022-08-24T19:29:00+02:00",
+      "generatorURL": "http://0.0.0.0:3000/alerting/grafana/t7R1ZdZ4k/view",
+      "fingerprint": "54827aa3e6b3dbbe",
+      "silenceURL": "http://0.0.0.0:3000/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DHTTP+response+not+OK&matcher=grafana_folder%3DGeneral+Alerting",
+      "dashboardURL": "",
+      "panelURL": "",
+      "valueString": ""
+    }
+  ],
+  "groupLabels": {},
+  "commonLabels": {
+    "alertname": "HTTP response not OK",
+    "grafana_folder": "General Alerting"
+  },
+  "commonAnnotations": {},
+  "externalURL": "http://0.0.0.0:3000/",
+  "version": "1",
+  "groupKey": "{}:{}",
+  "truncatedAlerts": 0,
+  "orgId": 1,
+  "title": "[RESOLVED]  (HTTP response not OK General Alerting)",
+  "state": "ok",
+  "message": "**Resolved**\n\nValue: [no value]\nLabels:\n - alertname = HTTP response not OK\n - grafana_folder = General Alerting\nAnnotations:\nSource: http://0.0.0.0:3000/alerting/grafana/t7R1ZdZ4k/view\nSilence: http://0.0.0.0:3000/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DHTTP+response+not+OK&matcher=grafana_folder%3DGeneral+Alerting\n"
+}
 
