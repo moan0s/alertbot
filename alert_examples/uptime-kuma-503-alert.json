@@ -1,0 +1,68 @@
+{
+  "heartbeat": {
+    "monitorID": 5,
+    "status": 0,
+    "time": "2022-09-09 20:46:32.855",
+    "msg": "Request failed with status code 503",
+    "important": true,
+    "duration": 60
+  },
+  "monitor": {
+    "id": 5,
+    "name": "S1",
+    "url": "http://s1.hyteck.de",
+    "method": "GET",
+    "hostname": null,
+    "port": null,
+    "maxretries": 0,
+    "weight": 2000,
+    "active": 1,
+    "type": "http",
+    "interval": 60,
+    "retryInterval": 60,
+    "resendInterval": 0,
+    "keyword": null,
+    "expiryNotification": false,
+    "ignoreTls": false,
+    "upsideDown": false,
+    "maxredirects": 10,
+    "accepted_statuscodes": [
+      "200-299"
+    ],
+    "dns_resolve_type": "A",
+    "dns_resolve_server": "1.1.1.1",
+    "dns_last_result": null,
+    "pushToken": null,
+    "docker_container": "",
+    "docker_host": null,
+    "proxyId": null,
+    "notificationIDList": {
+      "1": true
+    },
+    "tags": [
+      {
+        "id": 4,
+        "monitor_id": 5,
+        "tag_id": 2,
+        "value": "",
+        "name": "Hyteck",
+        "color": "#2563EB"
+      }
+    ],
+    "mqttUsername": "",
+    "mqttPassword": "",
+    "mqttTopic": "",
+    "mqttSuccessMessage": "",
+    "databaseConnectionString": null,
+    "databaseQuery": null,
+    "authMethod": null,
+    "authWorkstation": null,
+    "authDomain": null,
+    "radiusUsername": null,
+    "radiusPassword": null,
+    "radiusCalledStationId": null,
+    "radiusCallingStationId": null,
+    "radiusSecret": null
+  },
+  "msg": "[S1] [🔴 Down] Request failed with status code 503"
+}
