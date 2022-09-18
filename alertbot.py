@@ -84,7 +84,17 @@ def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
 
 
 def uptime_kuma_alert_to_markdown(alert_data: dict):
-    return ["**Uptime Kuma Alert Data:**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
+    tags_readable = ", ".join([tag["name"] for tag in alert_data["monitor"]["tags"]])
+    message = (
+        f"""**Firing 🔥**: Monitor down: {alert_data["monitor"]["url"]}
+
+* **Error:** {alert_data["heartbeat"]["msg"]}
+* **Started at:** {alert_data["heartbeat"]["time"]}
+* **Tags:** {tags_readable}
+* **Source:** "Uptime Kuma"
+                    """
+    )
+    return [message]
 
 
 def uptime_kuma_resolved_to_markdown(alert_data: dict):
