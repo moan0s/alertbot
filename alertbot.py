@@ -70,16 +70,20 @@ def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
     if raw_mode or alert_type == "not-found":
         return ["**Data received**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
     else:
-        if alert_type == "grafana-alert":
-            messages = grafana_alert_to_markdown(alert_data)
-        elif alert_type == "grafana-resolved":
-            messages = grafana_alert_to_markdown(alert_data)
-        elif alert_type == "prometheus-alert":
-            messages = prometheus_alert_to_markdown(alert_data)
-        elif alert_type == "uptime-kuma-alert":
-            messages = uptime_kuma_alert_to_markdown(alert_data)
-        elif alert_type == "uptime-kuma-resolved":
-            messages = uptime_kuma_resolved_to_markdown(alert_data)
+        try:
+            if alert_type == "grafana-alert":
+                messages = grafana_alert_to_markdown(alert_data)
+            elif alert_type == "grafana-resolved":
+                messages = grafana_alert_to_markdown(alert_data)
+            elif alert_type == "prometheus-alert":
+                messages = prometheus_alert_to_markdown(alert_data)
+            elif alert_type == "uptime-kuma-alert":
+                messages = uptime_kuma_alert_to_markdown(alert_data)
+            elif alert_type == "uptime-kuma-resolved":
+                messages = uptime_kuma_resolved_to_markdown(alert_data)
+        except KeyError as e:
+            messages = ["**Data received**\n```\n" + str(alert_data).strip(
+                "\n").strip() + f"\n```\nThe data was detected as {alert_type} but was not in an expected format. If you want to help the development of this bot, file a bug report [here](https://github.com/moan0s/alertbot/issues)\n{e.with_traceback()}"]
     return messages
 
 
