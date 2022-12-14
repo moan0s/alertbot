@@ -3,6 +3,7 @@ from maubot.handlers import web, command
 from aiohttp.web import Request, Response, json_response
 import json
 import datetime
+from mautrix.errors.request import MForbidden
 
 helpstring = f"""# Alertbot
 
@@ -186,7 +187,11 @@ class AlertBot(Plugin):
     @web.post("/webhook/{room_id}")
     async def webhook_room(self, req: Request) -> Response:
         room_id = req.match_info["room_id"].strip()
-        await self.send_alert(req, room=room_id)
+        try:
+            await self.send_alert(req, room=room_id)
+        except MForbidden:
+            self.log.error(f"Could not send to {room_id}: Forbidden. Most likely the bot is not invited in the room.")
+            return json_response('{"status": "forbidden", "error": "forbidden"}', status=403)
         return json_response({"status": "ok"})
 
     @command.new()
