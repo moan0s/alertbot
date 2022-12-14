@@ -109,7 +109,7 @@ def uptime_kuma_resolved_to_markdown(alert_data: dict):
 
 * **Status:** {alert_data["heartbeat"]["msg"]}
 * **Started at:** {alert_data["heartbeat"]["time"]}
-* Duration until resolved {alert_data["heartbeat"]["duration"]}
+* Duration until resolved {alert_data["heartbeat"]["duration"]}s
 * **Tags:** {tags_readable}
 * **Source:** "Uptime Kuma"
     """
