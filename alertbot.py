@@ -102,7 +102,19 @@ def uptime_kuma_alert_to_markdown(alert_data: dict):
 
 
 def uptime_kuma_resolved_to_markdown(alert_data: dict):
-    return ["**Uptime Kuma Resolved Data:**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
+    tags_readable = ", ".join([tag["name"] for tag in alert_data["monitor"]["tags"]])
+    message = (
+        f"""**Resolved 💚**: {alert_data["monitor"]["url"]}
+
+* **Status:** {alert_data["heartbeat"]["msg"]}
+* **Started at:** {alert_data["heartbeat"]["time"]}
+* Duration until resolved {alert_data["heartbeat"]["duration"]}
+* **Tags:** {tags_readable}
+* **Source:** "Uptime Kuma"
+    """
+    )
+    return [message]
+
 
 
 def grafana_alert_to_markdown(alert_data: dict) -> list:
