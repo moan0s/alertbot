@@ -50,7 +50,7 @@ def get_alert_type(data):
             if data['status'] == "firing":
                 return "prometheus-alert"
             else:
-                return "grafana-resolved"
+                return "prometheus-resolved"
     except KeyError:
         pass
 
@@ -77,6 +77,8 @@ def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
             elif alert_type == "grafana-resolved":
                 messages = grafana_alert_to_markdown(alert_data)
             elif alert_type == "prometheus-alert":
+                messages = prometheus_alert_to_markdown(alert_data)
+            elif alert_type == "prometheus-resolved":
                 messages = prometheus_alert_to_markdown(alert_data)
             elif alert_type == "uptime-kuma-alert":
                 messages = uptime_kuma_alert_to_markdown(alert_data)
@@ -162,12 +164,11 @@ def prometheus_alert_to_markdown(alert_data: dict) -> str:
     messages = []
     for alert in alert_data["alerts"]:
         message = (
-            f"""**{alert['status']}**: {alert['annotations']['description']}  
-    
+                f"""**{alert['status']}** {'💚' if alert['status'] == 'resolved' else '🔥'}: {alert['annotations']['description']}
 * **Alertname:** {alert["labels"]['alertname']}
 * **Instance:** {alert["labels"]['instance']}
 * **Job:** {alert["labels"]['job']}
-            """
+"""
         )
         messages.append(message)
     return messages
