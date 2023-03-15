@@ -208,7 +208,7 @@ class AlertBot(Plugin):
     @command.new()
     async def url(self, evt: MessageEvent) -> None:
         """Answers with the url of the webhook"""
-        await evt.reply(f"`{self.webapp_url}/webhook`")
+        await evt.reply(f"`{self.webapp_url}/webhook/{evt.room_id}`")
 
     @command.new()
     async def raw(self, evt: MessageEvent) -> None:

@@ -1,3 +1,7 @@
+# March 2023
+
+Change `!url` to display the full webhook url not just the base
+
 # December 2022
 
 * Handle sending an alert to a room where the bot is not allowed to send messages [#2](https://github.com/moan0s/alertbot/issues/2)
