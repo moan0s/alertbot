@@ -8,8 +8,16 @@ join the [Alertbot room on matrix](https://matrix.to/#/#alertbot:hyteck.de)
 
 # Getting Started
 
+## OPTION 1: Use provided alertbot
+
+* Create a Matrix room and invite @alertbot:hyteck.de
+* Send `!url` to the room. The bot will answer with the webhook URL
+* Put the Webhook URL into your monitoring solution (see below)
+
+## OPTION 2: Selfhost alertbot
+
 **Prerequisites:**
-* A maubot instance: Please [refer to the docs](https://docs.mau.fi/maubot/usage/setup/index.html) for setting up one
+* A Matrix server where you have access to a maubot instance: Please [refer to the docs](https://docs.mau.fi/maubot/usage/setup/index.html) for setting up one
 * An instance of alertmanager or grafana or a similar alerting program that is able to send webhooks
 
 **Getting the code**
@@ -84,7 +92,7 @@ curl --header "Content-Type: application/json" \
 
 # Local testing Setup
 
-Also you might want to test the bot on your local machine but send webhooks to a public server. To do that use a domain 
+You might want to test the bot on your local machine but send webhooks to a public server. To do that use a domain 
 e.g. webbhook.example.com and configure nginx as reverse proxy for port 4242 for this domain.
 
 ## Connect
