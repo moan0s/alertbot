@@ -177,14 +177,15 @@ def prometheus_alert_to_markdown(alert_data: dict) -> str:
     :return: Alert as fomatted markdown
     """
     messages = []
+    known_labels = ['alertname', 'instance', 'job']
     for alert in alert_data["alerts"]:
-        message = (
-                f"""**{alert['status']}** {'💚' if alert['status'] == 'resolved' else '🔥'}: {alert['annotations']['description']}
-* **Alertname:** {alert["labels"]['alertname']}
-* **Instance:** {alert["labels"]['instance']}
-* **Job:** {alert["labels"]['job']}
-"""
-        )
+        title = alert['annotations']['description'] if hasattr(alert['annotations'], 'description') else alert['annotations']['summary']
+        message = f"""**{alert['status']}** {'💚' if alert['status'] == 'resolved' else '🔥'}: {title}"""
+        for label_name in known_labels:
+            try:
+                message += "\n* **{0}**: {1}".format(label_name.capitalize(), alert["labels"][label_name])
+            except:
+                pass
         messages.append(message)
     return messages
 
