@@ -68,8 +68,10 @@ def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
 
     alert_type = get_alert_type(alert_data)
 
-    if raw_mode or alert_type == "not-found":
+    if raw_mode:
         return ["**Data received**\n```\n" + str(alert_data).strip("\n").strip() + "\n```"]
+    elif alert_type == "not-found":
+        return ["**Data received**\n " + dict_to_markdown(alert_data)]
     else:
         try:
             if alert_type == "grafana-alert":
@@ -103,6 +105,19 @@ def uptime_kuma_alert_to_markdown(alert_data: dict):
     )
     return [message]
 
+def dict_to_markdown(alert_data: dict):
+    md = ""
+    for key_or_dict in alert_data:
+        try:
+            alert_data[key_or_dict]
+        except TypeError:
+            md += "  " + dict_to_markdown(key_or_dict)
+            continue
+        if not(isinstance(alert_data[key_or_dict], str) or isinstance(alert_data[key_or_dict], int)):
+            md += "  " + dict_to_markdown(alert_data[key_or_dict])
+        else:
+            md += f"* {key_or_dict}: {alert_data[key_or_dict]}\n"
+    return md
 
 def uptime_kuma_resolved_to_markdown(alert_data: dict):
     tags_readable = ", ".join([tag["name"] for tag in alert_data["monitor"]["tags"]])
