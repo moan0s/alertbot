@@ -1,3 +1,7 @@
+# April 2023
+
+Raw mode defaults to unordered list, for improved readability.
+
 # March 2023
 
 Change `!url` to display the full webhook url not just the base
