@@ -33,7 +33,7 @@ mbc build
 
 **Configure the Bot**
 
-Next, once the plugin is installed, set up an [client](https://docs.mau.fi/maubot/usage/basic.html#creating-clients) and then create an [instance](https://docs.mau.fi/maubot/usage/basic.html#creating-instances) which connects the client and plugin. 
+Next, once the plugin is installed, set up a [client](https://docs.mau.fi/maubot/usage/basic.html#creating-clients) and then create an [instance](https://docs.mau.fi/maubot/usage/basic.html#creating-instances) which connects the client and plugin. 
 
 Finally, invite the bot to an encrypted room where alerts should be sent and query the bot for the room id with the command `!roomid`.
 
