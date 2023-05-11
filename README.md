@@ -5,6 +5,8 @@
 This bot uses the webhook functionality of monitoring/alerting solutions like Grafana or Alertmanager to forward alerts to matrix rooms.
 This means that you no longer have to use E-Mail or Slack to receive alerts. 
 
+## Getting Started
+
 You can either [invite](#invite-the-official-instance) an official instance of the bot, or [self-host](#self-host-an-instance) it on your own matrix server.
 
 ## Invite the Official Instance
@@ -23,12 +25,22 @@ You can either [invite](#invite-the-official-instance) an official instance of t
 
 **Build the Bot**
 
-Clone this repository and build it into a maubot plugin file (.mbp). Navigate to the Maubot Administration Interface and upload the .mpb file.
+The bot is built using the maubot command line tool `mbc`, you can either build it locally or remotely.
+
+Build it locally, and afterwards navigate to the Maubot Administration Interface and upload the .mpb file.
+```shell
+pip install maubot
+git clone https://github.com/moan0s/alertbot
+cd alertbot
+mbc build
+```
+
+Build it remotely, and upload the the build simultaneously.
 ```shell
 git clone https://github.com/moan0s/alertbot
 cd alertbot
-pip install maubot
-mbc build
+mbc login
+mbc build -u
 ```
 
 **Configure the Bot**
