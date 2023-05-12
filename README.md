@@ -77,16 +77,6 @@ The grafana setup is fairly simple and can be used to forward grafana alerts to 
 
 ![Screenshot of the Grafana Setup](assets/grafana.png)
 
-## Run Locally
-
-You might want to test the bot on your local machine but send webhooks to a public server. To do that use a domain 
-e.g. webbhook.example.com and configure nginx as reverse proxy for port 4242 for this domain.
-
-**Connect**
-
-Run the local server and connect via (29316 is the local maubot port)
-`ssh -N -R 4242:localhost:29316 webhook.example.com`
-
 ## Send Test Alerts
 
 Use an example from the `alert_examples/` to test your setup
