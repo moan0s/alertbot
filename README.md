@@ -35,10 +35,9 @@ cd alertbot
 mbc build
 ```
 
-Build it remotely, and upload the the build simultaneously.
+It's possible to upload the build to you maubot instance from the CLI. This is especially helpful when developing.
+First login to your instance, then add the `-u` flag to upload after build.
 ```shell
-git clone https://github.com/moan0s/alertbot
-cd alertbot
 mbc login
 mbc build -u
 ```
