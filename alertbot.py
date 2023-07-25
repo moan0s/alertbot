@@ -24,28 +24,32 @@ def convert_slack_webhook_to_markdown(data):
     attachment_titles = []
 
     if "text" in data:
-        markdown_message += f"*{data['text']}*\n"
+        markdown_message += f"{data['text']}\n"
 
     if "attachments" in data:
         for attach in data["attachments"]:
+            attachment_md = "> "
             if "title" in attach:
                 attachment_titles.append(attach['title'])
             if "title" in attach and "title_link" in attach:
-                markdown_message += f"## [{attach['title']}]({attach['title_link']})\n"
+                attachment_md += f"[{attach['title']}]({attach['title_link']})\n> "
             elif "title" in attach:
-                markdown_message += f"## {attach['title']}\n"
+                attachment_md += f"## {attach['title']}\n> "
             if "text" in attach:
-                markdown_message += f"{attach['text']}\n"
+                attachment_md += f"{attach['text']}\n> "
+            if "image_url" in attach and attach["image_url"] is not None:
+                attachment_md += f"![Image]({attach['image_url']})\n> "
             if 'fields' in attach:
                 for field in attach['fields']:
-                    markdown_message += f"- **{field['title']}** : {field['value']}\n"
+                    attachment_md += f"- **{field['title']}** : {field['value']}\n> "
+            markdown_message += attachment_md + "\n"
 
     if "sections" in data:
         for section in data["sections"]:
             if "activityTitle" in section and section['activityTitle'] not in attachment_titles:
                 markdown_message += f"## {section['activityTitle']}\n"
             if "activitySubtitle" in section:
-                markdown_message += f">{section['activitySubtitle']}\n"
+                markdown_message += f"{section['activitySubtitle']}\n"
 
     return [markdown_message]
 
