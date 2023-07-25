@@ -18,6 +18,10 @@ examples = [{"name": "Grafana Alert",
              "filepath": "../alert_examples/prometheus_alert.json",
              "expected_response": "",
              "type": "prometheus-alert"},
+            {"name": "Slack Alert",
+             "filepath": "../alert_examples/slack-webhook.json",
+             "expected_response": "",
+             "type": "slack-webhook"},
             ]
 
 
