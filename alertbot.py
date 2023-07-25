@@ -1,8 +1,9 @@
+import datetime
+import json
+
+from aiohttp.web import Request, Response, json_response
 from maubot import Plugin, MessageEvent
 from maubot.handlers import web, command
-from aiohttp.web import Request, Response, json_response
-import json
-import datetime
 from mautrix.errors.request import MForbidden
 
 helpstring = f"""# Alertbot
@@ -18,12 +19,46 @@ More information is on [Github](https://github.com/moan0s/alertbot)
 """
 
 
+def convert_slack_webhook_to_markdown(data):
+    markdown_message = ""
+    attachment_titles = []
+
+    if "text" in data:
+        markdown_message += f"*{data['text']}*\n"
+
+    if "attachments" in data:
+        for attach in data["attachments"]:
+            if "title" in attach:
+                attachment_titles.append(attach['title'])
+            if "title" in attach and "title_link" in attach:
+                markdown_message += f"## [{attach['title']}]({attach['title_link']})\n"
+            elif "title" in attach:
+                markdown_message += f"## {attach['title']}\n"
+            if "text" in attach:
+                markdown_message += f"{attach['text']}\n"
+            if 'fields' in attach:
+                for field in attach['fields']:
+                    markdown_message += f"- **{field['title']}** : {field['value']}\n"
+
+    if "sections" in data:
+        for section in data["sections"]:
+            if "activityTitle" in section and section['activityTitle'] not in attachment_titles:
+                markdown_message += f"## {section['activityTitle']}\n"
+            if "activitySubtitle" in section:
+                markdown_message += f">{section['activitySubtitle']}\n"
+
+    return [markdown_message]
+
+
 def get_alert_type(data):
     """
     Currently supported are ["grafana-alert", "grafana-resolved", "prometheus-alert", "not-found"]
 
     :return: alert type
     """
+
+    if ("text" in data) and ("attachments" in data):
+        return "slack-webhook"
 
     # Uptime-kuma has heartbeat
     try:
@@ -74,6 +109,8 @@ def get_alert_messages(alert_data: dict, raw_mode=False) -> list:
         return ["**Data received**\n " + dict_to_markdown(alert_data)]
     else:
         try:
+            if alert_type == "slack-webhook":
+                messages = convert_slack_webhook_to_markdown(alert_data)
             if alert_type == "grafana-alert":
                 messages = grafana_alert_to_markdown(alert_data)
             elif alert_type == "grafana-resolved":
@@ -105,6 +142,7 @@ def uptime_kuma_alert_to_markdown(alert_data: dict):
     )
     return [message]
 
+
 def dict_to_markdown(alert_data: dict):
     md = ""
     for key_or_dict in alert_data:
@@ -113,11 +151,12 @@ def dict_to_markdown(alert_data: dict):
         except TypeError:
             md += "  " + dict_to_markdown(key_or_dict)
             continue
-        if not(isinstance(alert_data[key_or_dict], str) or isinstance(alert_data[key_or_dict], int)):
+        if not (isinstance(alert_data[key_or_dict], str) or isinstance(alert_data[key_or_dict], int)):
             md += "  " + dict_to_markdown(alert_data[key_or_dict])
         else:
             md += f"* {key_or_dict}: {alert_data[key_or_dict]}\n"
     return md
+
 
 def uptime_kuma_resolved_to_markdown(alert_data: dict):
     tags_readable = ", ".join([tag["name"] for tag in alert_data["monitor"]["tags"]])
@@ -132,7 +171,6 @@ def uptime_kuma_resolved_to_markdown(alert_data: dict):
     """
     )
     return [message]
-
 
 
 def grafana_alert_to_markdown(alert_data: dict) -> list:
@@ -179,7 +217,8 @@ def prometheus_alert_to_markdown(alert_data: dict) -> str:
     messages = []
     known_labels = ['alertname', 'instance', 'job']
     for alert in alert_data["alerts"]:
-        title = alert['annotations']['description'] if hasattr(alert['annotations'], 'description') else alert['annotations']['summary']
+        title = alert['annotations']['description'] if hasattr(alert['annotations'], 'description') else \
+            alert['annotations']['summary']
         message = f"""**{alert['status']}** {'💚' if alert['status'] == 'resolved' else '🔥'}: {title}"""
         for label_name in known_labels:
             try:

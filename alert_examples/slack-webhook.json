@@ -1,0 +1,34 @@
+{
+  "alias": "GlitchTip",
+  "text": "GlitchTip Alert",
+  "attachments": [
+    {
+      "title": "TypeError: exceptions must derive from BaseException",
+      "title_link": "https://alerts.djangoflow.net/getease-bv/issues/61126",
+      "text": "django.core.management.commands.shell in <module>",
+      "image_url": null,
+      "color": "#e52b50",
+      "fields": [
+        {
+          "title": "Project",
+          "value": "Django",
+          "short": true
+        },
+        {
+          "title": "Environment",
+          "value": "sandbox",
+          "short": true
+        }
+      ],
+      "mrkdown_in": [
+        "text"
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "activityTitle": "TypeError: exceptions must derive from BaseException",
+      "activitySubtitle": "[View Issue DJANGO-1KR3](https://alerts.djangoflow.net/getease-bv/issues/61126)"
+    }
+  ]
+}
