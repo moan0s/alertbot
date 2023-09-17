@@ -1,6 +1,6 @@
-import datetime
 import json
 
+import dateutil.parser
 from aiohttp.web import Request, Response, json_response
 from maubot import Plugin, MessageEvent
 from maubot.handlers import web, command
@@ -75,11 +75,11 @@ def get_alert_type(data):
 
     # Grafana
     try:
-        data["alerts"][0]["labels"]["grafana_folder"]
-        if data['status'] == "firing":
-            return "grafana-alert"
-        else:
-            return "grafana-resolved"
+        if data["alerts"][0]["labels"]["grafana_folder"]:
+            if data['status'] == "firing":
+                return "grafana-alert"
+            else:
+                return "grafana-resolved"
     except KeyError:
         pass
 
@@ -186,7 +186,6 @@ def grafana_alert_to_markdown(alert_data: dict) -> list:
     """
     messages = []
     for alert in alert_data["alerts"]:
-        datetime_format = "%Y-%m-%dT%H:%M:%S%z"
         if alert['status'] == "firing":
             message = (
                 f"""**Firing 🔥**: {alert['labels']['alertname']}  
@@ -198,8 +197,8 @@ def grafana_alert_to_markdown(alert_data: dict) -> list:
                 """
             )
         if alert['status'] == "resolved":
-            end_at = datetime.datetime.strptime(alert['endsAt'], datetime_format)
-            start_at = datetime.datetime.strptime(alert['startsAt'], datetime_format)
+            end_at = dateutil.parser.isoparse(alert['endsAt'])
+            start_at = dateutil.parser.isoparse(alert['startsAt'])
             message = (
                 f"""**Resolved 🥳**: {alert['labels']['alertname']}
     
