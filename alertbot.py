@@ -20,38 +20,41 @@ More information is on [Github](https://github.com/moan0s/alertbot)
 
 
 def convert_slack_webhook_to_markdown(data):
-    markdown_message = ""
+    # Error Handling: Check if data is a dictionary
+    if not isinstance(data, dict):
+        return ["Input data must be a dictionary"]
+
+    markdown_parts = []
     attachment_titles = []
 
     if "text" in data:
-        markdown_message += f"{data['text']}\n"
+        markdown_parts.append(f"{data['text']}")
 
     if "attachments" in data:
         for attach in data["attachments"]:
-            attachment_md = "> "
             if "title" in attach:
                 attachment_titles.append(attach['title'])
-            if "title" in attach and "title_link" in attach:
-                attachment_md += f"[{attach['title']}]({attach['title_link']})\n> "
-            elif "title" in attach:
-                attachment_md += f"## {attach['title']}\n> "
-            if "text" in attach:
-                attachment_md += f"{attach['text']}\n> "
-            if "image_url" in attach and attach["image_url"] is not None:
-                attachment_md += f"![Image]({attach['image_url']})\n> "
+                title_md = f"## {attach['title']}" if "title_link" not in attach else f"[{attach['title']}]({attach['title_link']})"
+                markdown_parts.append(f"> {title_md}")
+
+            for key in ["text", "image_url"]:
+                if key in attach and attach[key] is not None:
+                    extra_md = attach[key] if key == "text" else f"![Image]({attach[key]})"
+                    markdown_parts.append(f"> {extra_md}")
+
             if 'fields' in attach:
-                for field in attach['fields']:
-                    attachment_md += f"- **{field['title']}** : {field['value']}\n> "
-            markdown_message += attachment_md + "\n"
+                field_parts = [f"- **{field['title']}** : {field['value']}" for field in attach['fields']]
+                markdown_parts.extend([f"> {part}" for part in field_parts])
 
     if "sections" in data:
+        markdown_parts.append("")
         for section in data["sections"]:
             if "activityTitle" in section and section['activityTitle'] not in attachment_titles:
-                markdown_message += f"## {section['activityTitle']}\n"
+                markdown_parts.append(f"## {section['activityTitle']}")
             if "activitySubtitle" in section:
-                markdown_message += f"{section['activitySubtitle']}\n"
+                markdown_parts.append(section['activitySubtitle'])
 
-    return [markdown_message]
+    return ['\n'.join(markdown_parts)]
 
 
 def get_alert_type(data):
