@@ -152,6 +152,8 @@ def uptime_kuma_alert_to_markdown(alert_data: dict):
 
 def dict_to_markdown(alert_data: dict):
     md = ""
+    if alert_data is None:
+        return md
     for key_or_dict in alert_data:
         try:
             alert_data[key_or_dict]
