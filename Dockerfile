@@ -1,4 +1,4 @@
-FROM dock.mau.dev/maubot/maubot:v0.5.2-standalone AS deps
+FROM dock.mau.dev/maubot/maubot:v0.6.0-standalone AS deps
 
 WORKDIR /plugin
 
