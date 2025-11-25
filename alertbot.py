@@ -238,10 +238,10 @@ def prometheus_alert_to_markdown(alert_data: dict) -> str:
 class AlertBot(Plugin):
     raw_mode = False
 
-    async def send_alert(self, req, room):
-        text = await req.text()
+    async def send_alert(self, text, room):
         self.log.info(text)
-        content = json.loads(f"{text}")
+        content = json.loads(text)
+
         for message in get_alert_messages(content, self.raw_mode):
             self.log.debug(f"Sending alert to {room}")
             await self.client.send_markdown(room, message)
@@ -249,11 +249,15 @@ class AlertBot(Plugin):
     @web.post("/webhook/{room_id}")
     async def webhook_room(self, req: Request) -> Response:
         room_id = req.match_info["room_id"].strip()
+        text = await req.text()
         try:
-            await self.send_alert(req, room=room_id)
+            await self.send_alert(text, room=room_id)
         except MForbidden:
             self.log.error(f"Could not send to {room_id}: Forbidden. Most likely the bot is not invited in the room.")
             return json_response('{"status": "forbidden", "error": "forbidden"}', status=403)
+        except json.decoder.JSONDecodeError:
+            self.log.error(f"Decoding the data failed. {text}")
+            return json_response({"status": "failed", "error": "JSON decoding failed", "data": text}, status=400)
         return json_response({"status": "ok"})
 
     @command.new()
