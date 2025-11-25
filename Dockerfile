@@ -12,6 +12,10 @@ RUN mkdir build extract && mbc build -o build && unzip build/* -d extract
 
 FROM deps
 
+# no need for the management frontend
+# contains libraries triggering our security scanners
+RUN rm -rf /opt/maubot/maubot/management/frontend
+
 COPY --from=build --chmod=444 /plugin/extract/ /plugin
 
 ENTRYPOINT ["python"]
